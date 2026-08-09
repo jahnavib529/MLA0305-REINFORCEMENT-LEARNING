@@ -1,0 +1,99 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# MODULE 3 - REWARD TABLE
+# ==========================================================
+
+rewards = {
+
+    ("S1", "A1", "S2"): 5,
+    ("S1", "A2", "S2"): 10,
+
+    ("S1", "A1", "S3"): -1,
+    ("S1", "A2", "S3"): -5,
+
+    ("S2", "A1", "S1"): 3,
+    ("S2", "A2", "S1"): 7,
+
+    ("S2", "A1", "S3"): 2,
+    ("S2", "A2", "S3"): 1,
+
+    ("S3", "A1", "S1"): 4,
+    ("S3", "A2", "S1"): 6,
+
+    ("S3", "A1", "S2"): 0,
+    ("S3", "A2", "S2"): -2
+}
+
+# ==========================================================
+# CREATE REWARD TABLE
+# ==========================================================
+
+reward_rows = []
+
+for key, value in rewards.items():
+
+    reward_rows.append([
+        key[0],
+        key[1],
+        key[2],
+        value
+    ])
+
+reward_df = pd.DataFrame(
+    reward_rows,
+    columns=[
+        "Current State",
+        "Action",
+        "Next State",
+        "Reward"
+    ]
+)
+
+print("=" * 60)
+print("MODULE 3 - REWARD TABLE")
+print("=" * 60)
+
+print(reward_df)
+
+# ==========================================================
+# MODULE 3 GRAPH
+# ==========================================================
+
+labels = []
+
+for key in rewards.keys():
+
+    labels.append(
+        key[0] + "-" + key[1] + "-" + key[2]
+    )
+
+reward_values = list(rewards.values())
+
+plt.figure(figsize=(12, 6))
+
+plt.bar(labels, reward_values)
+
+plt.title("MODULE 3 - Reward Values")
+plt.xlabel("State - Action - Next State")
+plt.ylabel("Reward")
+
+plt.xticks(
+    rotation=45,
+    ha="right"
+)
+
+plt.axhline(
+    y=0,
+    linewidth=1
+)
+
+plt.grid(
+    axis="y",
+    linestyle="--",
+    alpha=0.5
+)
+
+plt.tight_layout()
+plt.show()
