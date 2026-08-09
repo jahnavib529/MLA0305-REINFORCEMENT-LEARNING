@@ -1,0 +1,86 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# MODULE 2 - TRANSITION PROBABILITY MATRIX
+# ==========================================================
+
+states = ["S1", "S2", "S3"]
+actions = ["A1", "A2"]
+
+transition_probabilities = {
+
+    ("S1", "A1"): {"S2": 0.6, "S3": 0.2},
+    ("S1", "A2"): {"S2": 0.4, "S3": 0.8},
+
+    ("S2", "A1"): {"S1": 0.7, "S3": 0.5},
+    ("S2", "A2"): {"S1": 0.3, "S3": 0.5},
+
+    ("S3", "A1"): {"S1": 0.9, "S2": 0.4},
+    ("S3", "A2"): {"S1": 0.1, "S2": 0.6}
+}
+
+# ==========================================================
+# CREATE MATRICES
+# ==========================================================
+
+for action in actions:
+
+    matrix = pd.DataFrame(
+        0.0,
+        index=states,
+        columns=states
+    )
+
+    for (state, act), transitions in transition_probabilities.items():
+
+        if act == action:
+
+            for next_state, probability in transitions.items():
+                matrix.loc[state, next_state] = probability
+
+    print("\n========================================")
+    print("Transition Probability Matrix -", action)
+    print("========================================")
+    print(matrix)
+
+    # ======================================================
+    # GRAPH FOR EACH ACTION
+    # ======================================================
+
+    plt.figure(figsize=(7, 5))
+
+    plt.imshow(matrix.values, aspect="auto")
+
+    plt.colorbar(label="Probability")
+
+    plt.xticks(
+        range(len(states)),
+        states
+    )
+
+    plt.yticks(
+        range(len(states)),
+        states
+    )
+
+    plt.xlabel("Next State")
+    plt.ylabel("Current State")
+
+    plt.title(
+        "MODULE 2 - Transition Probability Matrix " + action
+    )
+
+    # Display probability values
+    for i in range(len(states)):
+        for j in range(len(states)):
+
+            plt.text(
+                j,
+                i,
+                f"{matrix.iloc[i, j]:.2f}",
+                ha="center",
+                va="center"
+            )
+
+    plt.show()
