@@ -1,0 +1,146 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# MODULE 5 - SUMMARY
+# ==========================================================
+
+states = ["S1", "S2", "S3"]
+actions = ["A1", "A2"]
+
+transition_probabilities = {
+
+    ("S1", "A1"): {"S2": 0.6, "S3": 0.2},
+    ("S1", "A2"): {"S2": 0.4, "S3": 0.8},
+
+    ("S2", "A1"): {"S1": 0.7, "S3": 0.5},
+    ("S2", "A2"): {"S1": 0.3, "S3": 0.5},
+
+    ("S3", "A1"): {"S1": 0.9, "S2": 0.4},
+    ("S3", "A2"): {"S1": 0.1, "S2": 0.6}
+}
+
+rewards = {
+
+    ("S1", "A1", "S2"): 5,
+    ("S1", "A2", "S2"): 10,
+
+    ("S1", "A1", "S3"): -1,
+    ("S1", "A2", "S3"): -5,
+
+    ("S2", "A1", "S1"): 3,
+    ("S2", "A2", "S1"): 7,
+
+    ("S2", "A1", "S3"): 2,
+    ("S2", "A2", "S3"): 1,
+
+    ("S3", "A1", "S1"): 4,
+    ("S3", "A2", "S1"): 6,
+
+    ("S3", "A1", "S2"): 0,
+    ("S3", "A2", "S2"): -2
+}
+
+# ==========================================================
+# CALCULATE EXPECTED REWARDS
+# ==========================================================
+
+summary = []
+
+for state in states:
+
+    for action in actions:
+
+        expected_reward = 0
+
+        for next_state, probability in transition_probabilities[
+            (state, action)
+        ].items():
+
+            reward = rewards[
+                (state, action, next_state)
+            ]
+
+            expected_reward += probability * reward
+
+        summary.append([
+            state,
+            action,
+            round(expected_reward, 2)
+        ])
+
+summary_df = pd.DataFrame(
+    summary,
+    columns=[
+        "State",
+        "Action",
+        "Expected Immediate Reward"
+    ]
+)
+
+# ==========================================================
+# SUMMARY STATISTICS
+# ==========================================================
+
+print("=" * 60)
+print("MODULE 5 - SUMMARY")
+print("=" * 60)
+
+print("\nSummary Table:")
+print(summary_df)
+
+print("\nTotal State-Action Pairs:",
+      len(summary_df))
+
+print(
+    "Highest Expected Reward:",
+    summary_df["Expected Immediate Reward"].max()
+)
+
+print(
+    "Lowest Expected Reward:",
+    summary_df["Expected Immediate Reward"].min()
+)
+
+print(
+    "Average Expected Reward:",
+    round(
+        summary_df["Expected Immediate Reward"].mean(),
+        2
+    )
+)
+
+# ==========================================================
+# MODULE 5 GRAPH
+# ==========================================================
+
+pivot_table = summary_df.pivot(
+    index="State",
+    columns="Action",
+    values="Expected Immediate Reward"
+)
+
+pivot_table.plot(
+    kind="bar",
+    figsize=(8, 5)
+)
+
+plt.title(
+    "MODULE 5 - Expected Reward by State and Action"
+)
+
+plt.xlabel("State")
+plt.ylabel("Expected Immediate Reward")
+
+plt.xticks(rotation=0)
+
+plt.grid(
+    axis="y",
+    linestyle="--",
+    alpha=0.5
+)
+
+plt.legend(title="Action")
+
+plt.tight_layout()
+plt.show()
