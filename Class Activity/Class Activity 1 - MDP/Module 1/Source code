@@ -1,0 +1,101 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ==========================================================
+# MODULE 1 - MDP DATA
+# ==========================================================
+
+states = ["S1", "S2", "S3"]
+actions = ["A1", "A2"]
+
+# Transition Probabilities
+transition_probabilities = {
+
+    ("S1", "A1"): {"S2": 0.6, "S3": 0.2},
+    ("S1", "A2"): {"S2": 0.4, "S3": 0.8},
+
+    ("S2", "A1"): {"S1": 0.7, "S3": 0.5},
+    ("S2", "A2"): {"S1": 0.3, "S3": 0.5},
+
+    ("S3", "A1"): {"S1": 0.9, "S2": 0.4},
+    ("S3", "A2"): {"S1": 0.1, "S2": 0.6}
+}
+
+# Rewards
+rewards = {
+
+    ("S1", "A1", "S2"): 5,
+    ("S1", "A2", "S2"): 10,
+
+    ("S1", "A1", "S3"): -1,
+    ("S1", "A2", "S3"): -5,
+
+    ("S2", "A1", "S1"): 3,
+    ("S2", "A2", "S1"): 7,
+
+    ("S2", "A1", "S3"): 2,
+    ("S2", "A2", "S3"): 1,
+
+    ("S3", "A1", "S1"): 4,
+    ("S3", "A2", "S1"): 6,
+
+    ("S3", "A1", "S2"): 0,
+    ("S3", "A2", "S2"): -2
+}
+
+# ==========================================================
+# DISPLAY INFORMATION
+# ==========================================================
+
+print("=" * 60)
+print("MODULE 1 - MDP DATA")
+print("=" * 60)
+
+print("States :", states)
+print("Actions:", actions)
+
+print("\nNumber of States :", len(states))
+print("Number of Actions:", len(actions))
+
+num_transitions = sum(
+    len(value) for value in transition_probabilities.values()
+)
+
+print("Number of Transition Probabilities:", num_transitions)
+print("Number of Rewards:", len(rewards))
+
+print("\nTransition Probabilities:")
+for key, value in transition_probabilities.items():
+    print(key, "->", value)
+
+print("\nRewards:")
+for key, value in rewards.items():
+    print(key, "=", value)
+
+# ==========================================================
+# MODULE 1 GRAPH
+# ==========================================================
+
+categories = [
+    "States",
+    "Actions",
+    "Transitions",
+    "Rewards"
+]
+
+values = [
+    len(states),
+    len(actions),
+    num_transitions,
+    len(rewards)
+]
+
+plt.figure(figsize=(8, 5))
+plt.bar(categories, values)
+
+plt.title("MODULE 1 - MDP Basic Information")
+plt.xlabel("Category")
+plt.ylabel("Count")
+
+plt.grid(axis="y", linestyle="--", alpha=0.5)
+plt.show()
